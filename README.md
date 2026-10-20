@@ -2,6 +2,8 @@
 
 本仓库已按「月光博客」方案完成初始化，编译与发布全部由 GitHub Actions 自动完成，本机只负责写作。
 
+**线上地址：https://czargz.github.io/hugo-blog/**（2026-10-20 已上线验证，HTTP 200）
+
 ## 目录结构
 
 | 路径 | 作用 |
@@ -14,37 +16,28 @@
 | `archetypes/default.md` | 新建文章的 front matter 模板 |
 | `frontmatter.json` | Front Matter CMS 插件配置 |
 | `.github/workflows/hugo.yaml` | 自动构建部署工作流（Hugo 官方当前模板） |
-| `.tools/hugo/hugo.exe` | 本地 Hugo v0.168.0 **extended**（工作区上级目录） |
+| `themes/PaperMod` | PaperMod 主题，Git submodule 挂载 |
+| `.tools/hugo/hugo.exe` | 本地 Hugo v0.168.0 **extended**（工作区上级目录，未全局安装） |
 
 ## 已预置内容
 
 - Hugo v0.168.0 extended（主题 PaperMod 依赖 SCSS/PostCSS，非 extended 版无法编译）
 - PaperMod 主题，以 Git submodule 方式挂载在 `themes/PaperMod`
-- 官方 Actions 工作流：checkout 带 `submodules: recursive` + `fetch-depth: 0`，并安装 Dart Sass 与 Go/Node
+- 官方 Actions 工作流：checkout 带 `submodules: recursive` + `fetch-depth: 0`，并安装 Dart Sass
 - 中文站点配置：中文字数统计、阅读时间、归档与搜索入口
+- `baseURL = https://czargz.github.io/hugo-blog/`
 
-## 你还需要提供的素材
+## 待提供的素材（仓库与地址已就绪，无需再给）
 
-### 必需
-
-| 素材 | 说明 | 给我什么 |
+| 素材 | 状态 | 要求 |
 |---|---|---|
-| GitHub 用户名 + 仓库名 | 决定 `baseURL` 与访问地址 | 例如 `bill / my-blog` |
-| 站点标题与描述 | 显示在首页与浏览器标签 | 一句话即可 |
-| 作者名 | 页脚与文章署名 | Bill 或想用的笔名 |
-| 文章内容 | 正文主体 | 任选：Markdown / Word / PDF / 网页链接 / 纯文本，我来转换与排版 |
-| 图片素材 | 配图、封面、截图 | 文件本体，或本机路径；我会统一落到 `static/images/` |
-
-### 可选
-
-| 素材 | 说明 |
-|---|---|
-| 自定义域名 | 绑定后我写 `static/CNAME`，并把 `baseURL` 改成域名 |
-| 头像 / Logo | 首页 profile 模式使用 |
-| 社交链接 | GitHub、X、邮箱、RSS |
-| 评论系统 | Giscus / utterances（需公开仓库） |
-| 访问统计 | Umami / GA / 百度统计 |
-| 显示偏好 | 深浅色、目录、阅读时间、分享按钮、封面图 |
+| GitHub 用户名 + 仓库名 | ✅ 已定 `czargz / hugo-blog` | — |
+| 站点标题与描述 | ⬜ | 当前为占位「我的技术博客」，给我正式标题与一句话描述 |
+| 作者名 | ⬜ | 页脚与文章署名 |
+| 文章正文 | ⬜ | 任意格式：Markdown / Word / PDF / 网页链接 / 纯文本，我来转换与排版 |
+| 图片素材 | ⬜ | 文件本体或本机路径，我统一归档到 `static/images/` |
+| 自定义域名 | ⬜ 可选 | 给域名即可，我写 `static/CNAME` 并改 `baseURL` |
+| 头像 / Logo、社交链接、评论（Giscus）、统计代码 | ⬜ 可选 | 什么时候给都行，后加不改结构 |
 
 ## 日常使用流程
 
@@ -52,12 +45,16 @@
 2. 写文章：VS Code → Front Matter 面板 → 创建内容 → 目录选 `content/posts`
 3. 发布：把 `draft: true` 改成 `draft: false`
 4. 提交推送：VS Code 源代码管理 → 提交 → 推送
-5. 等待 Actions 构建完成（约数十秒），线上自动更新
+5. 等待 Actions 构建完成（约 1～2 分钟），线上自动更新
 
-## 已知坑位（已在本仓库规避）
+## 已踩过的坑（全部在本仓库修复）
 
-1. **必须用 Hugo extended**：普通版编译 PaperMod 会因缺少 Sass 报错。
-2. **Dart Sass 需单独安装**：新版 Hugo 不再内置，工作流里已加安装步骤。
-3. **`fetch-depth: 0`**：否则 `.Lastmod` 与 `.GitInfo` 取不到，文章修改时间会错。
-4. **`baseURL` 要带子路径**：项目页是 `https://用户名.github.io/仓库名/`，漏掉子路径会导致 CSS/图片全部 404。
-5. **`.frontmatter/database/` 要提交**：内含图片元数据（`mediaDb.json`），删了会丢失图片标题与 alt 信息。
+1. **`actions/starter-workflows` 的 `hugo.yml` 已过时**：仍停留在 Hugo 0.128 + `snap install dart-sass`。本仓库用的是 Hugo 官方文档当前版。
+2. **必须用 Hugo extended**：普通版编译 PaperMod 会因缺少 Sass 报错。
+3. **Dart Sass 需单独安装**：新版 Hugo 不再内置；且解压前必须先 `mkdir -p "${HOME}/.local"`，否则 `tar` 直接失败。
+4. **Pages 必须先开通**：`configure-pages` 的 `enablement: true` 只对已存在的站点生效，全新仓库仍需先调 API 用 `build_type: workflow` 开通一次，否则报 `Create Pages site failed`。
+5. **`workflow_dispatch` 与 rerun 对旧运行无效**：早期那次 0-job 失败运行无法重跑，只能推新 commit 触发新运行。
+6. **`fetch-depth: 0` + `submodules: recursive`**：否则主题拉不下来、`.Lastmod` 与 `.GitInfo` 取不到。
+7. **`baseURL` 要带子路径**：项目页是 `https://用户名.github.io/仓库名/`，漏掉子路径会导致 CSS/图片全部 404。
+8. **Hugo v0.158 起 `languageCode` 弃用**，须改用 `locale`；网上大量老教程仍在用旧写法。
+9. **`.frontmatter/database/` 要提交**：内含图片元数据（`mediaDb.json`），删了会丢失图片标题与 alt 信息。
