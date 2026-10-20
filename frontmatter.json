@@ -1,0 +1,63 @@
+{
+  "$schema": "https://frontmatter.codes/frontmatter.json.schema.json",
+  "frontMatter.framework.id": "hugo",
+  "frontMatter.content.publicFolder": "static",
+  "frontMatter.content.pageFolders": [
+    {
+      "title": "文章",
+      "path": "[[workspace]]/content/posts",
+      "contentTypes": ["default"]
+    }
+  ],
+  "frontMatter.content.contentTypes": [
+    {
+      "name": "default",
+      "pageBundle": false,
+      "fields": [
+        {
+          "title": "标题",
+          "name": "title",
+          "type": "string",
+          "single": true,
+          "required": true
+        },
+        {
+          "title": "描述",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "title": "发布时间",
+          "name": "date",
+          "type": "datetime",
+          "default": "{{now}}"
+        },
+        {
+          "title": "标签",
+          "name": "tags",
+          "type": "tags"
+        },
+        {
+          "title": "分类",
+          "name": "categories",
+          "type": "categories"
+        },
+        {
+          "title": "封面图",
+          "name": "cover",
+          "type": "image",
+          "isPreviewImage": true
+        },
+        {
+          "title": "草稿",
+          "name": "draft",
+          "type": "draft",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "frontMatter.media.publicFolder": "static",
+  "frontMatter.media.location": "images",
+  "frontMatter.media.supportedMimeTypes": ["image/", "video/", "audio/"]
+}
