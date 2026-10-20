@@ -35,6 +35,7 @@ jobs:
 
       - name: Install Dart Sass
         run: |
+          mkdir -p "${HOME}/.local"
           echo "Installing Dart Sass ${DART_SASS_VERSION}..."
           curl -sfL --output-dir "${{ runner.temp }}" -O "https://github.com/sass/dart-sass/releases/download/${DART_SASS_VERSION}/dart-sass-${DART_SASS_VERSION}-linux-x64.tar.gz"
           tar -C "${HOME}/.local" -xf "${{ runner.temp }}/dart-sass-${DART_SASS_VERSION}-linux-x64.tar.gz"
